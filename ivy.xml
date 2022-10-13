@@ -1,0 +1,27 @@
+<ivy-module version="2.0">
+
+    <info organisation="com.infodesire"
+          module="sampleApp"/>
+
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency org="junit" name="junit" rev="4.13.2"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+
+        Hamcrest is used by junit4
+        -->
+        <dependency org="org.hamcrest" name="hamcrest" rev="2.2"/>
+
+        <!--
+        https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+
+        We use this library only to show how to include thirdparty libs in the build process
+        -->
+        <dependency org="org.apache.commons" name="commons-lang3" rev="3.12.0"/>
+
+    </dependencies>
+
+</ivy-module>
