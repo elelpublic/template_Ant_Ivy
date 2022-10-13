@@ -19,6 +19,22 @@
 
     </target>
 
+    <target name="setup.groovy" depends="fetchlibs, properties">
+        <path id="groovy.lib.path">
+            <fileset dir="lib" includes="groovy-${groovy.version}.jar"/>
+        </path>
+        <taskdef name="groovy"
+                 classname="org.codehaus.groovy.ant.Groovy"
+                 classpathref="groovy.lib.path"
+        />
+    </target>
+
+    <target name="hello.groovy" depends="setup.groovy">
+        <groovy>
+            System.out.println( "Hello? Groovy speaking here" );
+        </groovy>
+    </target>
+
     <target name="fetchlibs" depends="tools.install, setup.ivy">
         <ivy:retrieve />
     </target>
@@ -65,7 +81,7 @@
     </target>
 
 
-    <target name="test.run" depends="compile">
+    <target name="test.run" depends="compile, setup.groovy">
 
         <!-- default fallback: test all -->
         <property name="test.include" value="**/*Test.class" />
@@ -106,6 +122,21 @@
             <report format="noframes" todir="target/test-report/report"/>
         </junitreport>
 
+        <groovy>
+            import java.awt.Desktop;
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop desktop = Desktop.getDesktop();
+                    File myFile = new File("target/test-report/report/junit-noframes.html");
+                    desktop.open(myFile);
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        </groovy>
+
     </target>
 
     <target name="clean">
@@ -125,6 +156,7 @@
 Sample project using ant and ivy
 
 ant tools.install ............. Install tools: ivy
+ant hello.groovy .............. Test the groovy installation
 ant clean ..................... Delete generated files
 ant clean.all ................. Delete all generated or downloaded files
 ant test ...................... Run unit tests

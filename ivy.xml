@@ -22,6 +22,13 @@
         -->
         <dependency org="org.apache.commons" name="commons-lang3" rev="3.12.0"/>
 
+        <!--
+        https://mvnrepository.com/artifact/org.apache.groovy/groovy
+
+        We use groovy only to perform script tasks in the ant build script
+        -->
+        <dependency org="org.apache.groovy" name="groovy" rev="4.0.5"/>
+
     </dependencies>
 
 </ivy-module>
