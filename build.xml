@@ -44,22 +44,43 @@
         <javac
                 srcdir="src/main/java"
                 destdir="target/classes"
+                debug="true"
         >
             <src path="src/main/java" />
             <src path="src/test/java" />
             <classpath>
                 <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
+                <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
             </classpath>
         </javac>
     </target>
 
-    <target name="hello" depends="test">
+    <target name="hello.help">
+        <property name="commandline" value="help" />
+        <antcall target="hello" />
+    </target>
+
+    <target name="hello.world">
+        <property name="commandline" value="-l world" />
+        <antcall target="hello" />
+    </target>
+
+    <target name="hello.repeat">
+        <property name="commandline" value="-r 5 world" />
+        <antcall target="hello" />
+    </target>
+
+    <target name="hello" depends="test-quietly">
+        <property name="commandline" value="world" />
         <java
-                classpath="target/classes"
-                classname="com.infodesire.sample.Main"
-        >
+            classpath="target/classes"
+            classname="com.infodesire.sample.Main"
+            >
+            <arg line="${commandline}" />
+
             <classpath>
                 <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
+                <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
             </classpath>
         </java>
     </target>
@@ -77,6 +98,23 @@
     </target>
 
     <target name="test" depends="test.run">
+        <fail if="failures" ></fail>
+        <groovy>
+            import java.awt.Desktop;
+            if (Desktop.isDesktopSupported()) {
+            try {
+            Desktop desktop = Desktop.getDesktop();
+            File myFile = new File("target/test-report/report/junit-noframes.html");
+            desktop.open(myFile);
+            }
+            catch (IOException ex) {
+            ex.printStackTrace();
+            }
+            }
+        </groovy>
+    </target>
+
+    <target name="test-quietly" depends="test.run">
         <fail if="failures" ></fail>
     </target>
 
@@ -122,21 +160,6 @@
             <report format="noframes" todir="target/test-report/report"/>
         </junitreport>
 
-        <groovy>
-            import java.awt.Desktop;
-            if (Desktop.isDesktopSupported()) {
-                try {
-                    Desktop desktop = Desktop.getDesktop();
-                    File myFile = new File("target/test-report/report/junit-noframes.html");
-                    desktop.open(myFile);
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-        </groovy>
-
     </target>
 
     <target name="clean">
@@ -160,7 +183,10 @@ ant hello.groovy .............. Test the groovy installation
 ant clean ..................... Delete generated files
 ant clean.all ................. Delete all generated or downloaded files
 ant test ...................... Run unit tests
-ant hello ..................... Compile and run the hello world program
+ant hello ..................... Run program
+ant hello.world ............... Run program with "-l" option
+ant hello.repeat .............. Run program with "-r 5" option
+ant hello.help ................ Run program with "help" command
 
         </echo>
     </target>
