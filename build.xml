@@ -22,6 +22,7 @@
     <target name="setup.groovy" depends="fetchlibs, properties">
         <path id="groovy.lib.path">
             <fileset dir="lib" includes="groovy-${groovy.version}.jar"/>
+            <fileset dir="lib" includes="groovy-ant-${groovy.version}.jar"/>
         </path>
         <taskdef name="groovy"
                  classname="org.codehaus.groovy.ant.Groovy"
@@ -51,6 +52,7 @@
             <classpath>
                 <pathelement location="lib/commons-lang3-${commons-lang3.version}.jar" />
                 <pathelement location="lib/commons-cli-${commons-cli.version}.jar" />
+                <pathelement location="lib/junit-${junit.version}.jar" />
             </classpath>
         </javac>
     </target>
